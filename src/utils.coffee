@@ -170,5 +170,26 @@ useWindowSize = () ->
 
 	return size
 
+# https://usehooks.com/useEventListener/
+useEventListener = (eventName, handler, element = window) ->
+	savedHandler = React.useRef()
+	
+	# Update ref.current value if handler changes. This allows our effect below to always get latest handler
+	# without us needing to pass it in effect deps array and potentially cause effect to re-run every render.
+	React.useEffect () ->
+		savedHandler.current = handler
+	, [handler]
+
+	React.useEffect () ->
+		isSupported = element && element.addEventListener
+		if !isSupported then return
+		
+		eventListener = (event) -> savedHandler.current event
+		element.addEventListener eventName, eventListener
+		
+		return () -> element.removeEventListener eventName, eventListener
+
+	, [eventName, element]
+
 #auto_export: none_
-module.exports = {keyCodes, getCookie, capitalize, memoDeep, emptyIfNil, cutTextAt, toHMM, toH, toMM, round, formatPrice, fromHHMMorDec, scorePassword, useChangeState, useFocus, useForceScrollbar, useOuterClick, useMySize, useWindowSize}
+module.exports = {keyCodes, getCookie, capitalize, memoDeep, emptyIfNil, cutTextAt, toHMM, toH, toMM, round, formatPrice, fromHHMMorDec, scorePassword, useChangeState, useFocus, useForceScrollbar, useOuterClick, useMySize, useWindowSize, useEventListener}

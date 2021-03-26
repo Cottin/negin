@@ -9,7 +9,7 @@ React = require 'react'
 rfr = require 'react-functional-router'
 
 useNegin = require './useNegin'
-{useWindowSize, keyCodes: {ENTER, UP, DOWN}} = require './utils'
+{useWindowSize, keyCodes: {ENTER, UP, DOWN, ESC}} = require './utils'
 
 
 AutoComplete = func
@@ -44,7 +44,7 @@ AutoComplete = func
 		if !isEmpty groupItems
 			groups.push merge group, {items: groupItems}
 			items.push ...groupItems
-		else groups.push merge group, {items: []}
+		# else groups.push merge group, {items: [], isMatch: groupIsMatched}
 
 	if !isNil arrowIdx then selectedIdx = arrowIdx
 	else if !isNil preSelectedIdx then selectedIdx = preSelectedIdx
@@ -63,6 +63,8 @@ AutoComplete = func
 			when DOWN 
 				selectedIdx < count - 1 && setArrowIdx selectedIdx+1
 				e.preventDefault() # arrow moves cursor in input, so we prevent it
+			when ESC 
+				props.onPicked null
 			else
 				setArrowIdx null # reset arrowIdx when we type or erase
 
@@ -102,11 +104,12 @@ AutoComplete.simple = func
 	test: (text, item) -> if item then test new RegExp("#{text}", 'i'), item.text
 	onPicked: (item) -> props.onPicked item?.text},
 		(selectedIdx, groups, matched) ->
+			items = groups[0]?.items || []
 			_ {s: 'posa top35 w100% bgwh sh0_1_8_1 z20 p5_0'},
-				if isEmpty props.items
+				if isEmpty items
 					props.ifEmpty()
 				else
-					$ (groups[0]?.items || []), map (item) ->
+					$ items, map (item) ->
 						_ {key: item.text, tabIndex: 0, onMouseDown: -> props.onPicked(item.text),
 						s: "p10_20 curp fa12bk-84 #{selectedIdx == item.idx && 'bgbua-2'} ho(bgbua-2)"},
 							_ TextMatch, {matched, text: item.text}

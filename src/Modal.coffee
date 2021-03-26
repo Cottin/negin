@@ -42,7 +42,7 @@ class ModalBase extends React.Component
 Modal = (props) ->
 	_ = useNegin()
 	_ ModalBase, {},
-		_ {s: 'posa w100% p0_20 z11 top15vh <500[top5vh] xrc_ xg1'},
+		_ {s: 'posa w100% p0_20 z11 top15vh <500[top5vh] xrc_ xg1 ' + props.s_},
 			props.children
 		_ {s: 'posf w100% h100% z10 bgbk-6 xrcc _fade1'}
 

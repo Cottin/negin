@@ -1,6 +1,6 @@
 either = require('ramda/src/either'); isNil = require('ramda/src/isNil'); map = require('ramda/src/map'); match = require('ramda/src/match'); merge = require('ramda/src/merge'); props = require('ramda/src/props'); type = require('ramda/src/type'); #auto_require: srcramda
 {func, $} = RE = require 'ramda-extras' #auto_require: ramda-extras
-[ːwhite, ːmenu, ːbrown] = ['white', 'menu', 'brown'] #auto_sugar
+[ːbrown, ːwhite, ːmenu] = ['brown', 'white', 'menu'] #auto_sugar
 qq = (f) -> console.log match(/return (.*);/, f.toString())[1], f()
 qqq = (...args) -> console.log ...args
 _ = (...xs) -> xs
@@ -8,7 +8,7 @@ _ = (...xs) -> xs
 React = require 'react'
 rfr = require 'react-functional-router'
 
-{useOuterClick, keyCodes: {ENTER, UP, DOWN}} = require './utils'
+{useEventListener, useOuterClick, keyCodes: {ESC}} = require './utils'
 Button = require './Button'
 # icons = requije './icons'
 useNegin = require './useNegin'
@@ -37,7 +37,10 @@ DropDown = func
 	[arrowIdx, setArrowIdx] = React.useState null
 	[isOpen, setIsOpen] = React.useState false
 	_ = useNegin()
-	# document.addEventListener 'click', (e) -> console.log 'clickeliclick'
+	onKeyDown = (e) ->
+		if !isOpen || !e then return
+		if e.keyCode == ESC then setIsOpen false
+	useEventListener 'keydown', onKeyDown
 
 	ref = React.useRef null
 	useOuterClick ref, -> setIsOpen false
@@ -64,10 +67,9 @@ DropDown = func
 	# TODO: arrow navigation
 
 	onClick = () -> setIsOpen !isOpen
-	onKeyDown = (e) -> if e.keyCode == SPACE || e.keyCode == ENTER then onClick()
 
 	_ {s: 'posr xg1 xr__', className: props.className, s_: props.s_, s__: props.s__},
-		props.input {isOpen, onClick, onKeyDown}
+		props.input {isOpen, onClick}
 		if isOpen then _ {ref, s: 'posa w100%'}, props.content selectedIdx, groups, () -> setIsOpen false
 		# if isOpen then props.content selectedIdx, groups, () -> setIsOpen false
 
