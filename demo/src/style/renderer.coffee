@@ -4,16 +4,17 @@ prefixer = require('fela-plugin-prefixer').default
 fallbackValue = require('fela-plugin-fallback-value').default
 shortstyle = require 'shortstyle'
 {has, omit, props, type} = require 'ramda' #auto_require: ramda
-{fchange, $} = require 'ramda-extras' #auto_require: ramda-extras
+{change, $} = require 'ramda-extras' #auto_require: ramda-extras
 
 styleMaps = require './styleMaps'
 felaRenderer = require './felaRenderer'
+colors = require './colors'
 
 
 # attrMaps = {}
 # attrMaps.is = (x) -> {id: x} # hack to be able to use is as a label
 
-parseShortstyle = shortstyle omit(['unit', '_'], styleMaps), styleMaps.unit
+parseShortstyle = shortstyle {styleMaps: omit(['unit', '_'], styleMaps), unit: styleMaps.unit, colors}
 
 createElementFela = ->
 	[a0] = arguments
@@ -36,7 +37,7 @@ createElementFela = ->
 	felaClassName = felaRenderer.renderRule (-> felaStyle), {}
 	shortRender = performance.now() - shortRender0
 
-	props_ = fchange props,
+	props_ = $ props, change
 		s: undefined
 		s__: if props.s__ then props.s__ + ' > ' + props.s else props.s
 		className: (c) -> if c then felaClassName + ' ' + c else felaClassName

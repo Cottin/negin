@@ -9,7 +9,7 @@ React = require 'react'
 rfr = require 'react-functional-router'
 
 useNegin = require './useNegin'
-{useWindowSize, keyCodes: {ENTER, UP, DOWN, ESC}} = require './utils'
+{useWindowSize, keyCodes: {ENTER, UP, DOWN, ESC}} = utils = require './utils'
 
 
 AutoComplete = func
@@ -53,10 +53,9 @@ AutoComplete = func
 	onKeyDown = (e) ->
 		switch e.keyCode
 			when ENTER
-				if count == 0 then e.preventDefault()
-				else
-					props.onPicked items[selectedIdx]
-					e.stopPropagation()
+				if count == 0 then props.onPicked null, items, text
+				else props.onPicked items[selectedIdx], items, text
+				e.stopPropagation()
 			when UP
 				selectedIdx > 0 && setArrowIdx selectedIdx-1
 				e.preventDefault() # arrow moves cursor in input, so we prevent it
@@ -101,22 +100,25 @@ AutoComplete.simple = func
 	_ AutoComplete, {className: props.className, inputS: props.inputS, 
 	groups: [{items: $ props.items, map (text) -> {text}}]
 	preSelected: (item) -> item.text == props.preSelected
-	test: (text, item) -> if item then test new RegExp("#{text}", 'i'), item.text
-	onPicked: (item) -> props.onPicked item?.text},
+	test: (text, item) -> if item then test new RegExp("#{utils.escapeRegExp text}", 'i'), item.text
+	onPicked: (item, items, text) -> props.onPicked item?.text, items, text},
 		(selectedIdx, groups, matched) ->
 			items = groups[0]?.items || []
 			_ {s: 'posa top35 w100% bgwh sh0_1_8_1 z20 p5_0'},
 				if isEmpty items
-					props.ifEmpty()
+					props.ifEmpty matched
 				else
 					$ items, map (item) ->
-						_ {key: item.text, tabIndex: 0, onMouseDown: -> props.onPicked(item.text),
+						_ {key: item.text, tabIndex: 0, onMouseDown: -> props.onPicked(item.text, items),
 						s: "p10_20 curp fa12bk-84 #{selectedIdx == item.idx && 'bgbua-2'} ho(bgbua-2)"},
 							_ TextMatch, {matched, text: item.text}
 
 TextMatch = ({matched, text}) ->
 	_ = useNegin()
-	[isMatch, before_, after_] = match new RegExp("(.*?)#{toLower(matched)}(.*)"), toLower(text)
+	esc = utils.escapeRegExp
+	[isMatch, before_, after_] = match new RegExp("(.*?)#{toLower(esc matched)}(.*)"), toLower(esc text)
+	# Note: underline of escaped things doesnt work properly but deemd not important enought to fix
+	#				eg. test$123 search for $ gives underline of 1
 	if !isMatch then return _ 'span', {}, text
 	a = length(before_ || '')
 	b = length(matched || '')

@@ -1,5 +1,5 @@
 equals = require('ramda/src/equals'); isNil = require('ramda/src/isNil'); length = require('ramda/src/length'); match = require('ramda/src/match'); replace = require('ramda/src/replace'); split = require('ramda/src/split'); test = require('ramda/src/test'); #auto_require: srcramda
-{change, isNilOrEmpty} = RE = require 'ramda-extras' #auto_require: ramda-extras
+{change, $, isNilOrEmpty} = RE = require 'ramda-extras' #auto_require: ramda-extras
 [] = [] #auto_sugar
 qq = (f) -> console.log match(/return (.*);/, f.toString())[1], f()
 qqq = (...args) -> console.log ...args
@@ -35,6 +35,10 @@ capitalize = (s) -> s.charAt(0).toUpperCase() + s.slice(1)
 memoDeep = (f) -> React.memo f, equals
 
 emptyIfNil = (x) -> if isNil x then '' else x
+
+# https://github.com/tc39/proposal-regex-escaping
+# https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#escaping
+escapeRegExp = (s) -> String(s).replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
 
 cutTextAt = (n, s) ->
 	if isNil s then ''
@@ -190,6 +194,6 @@ useEventListener = (eventName, handler, element = window) ->
 		return () -> element.removeEventListener eventName, eventListener
 
 	, [eventName, element]
-
+	
 #auto_export: none_
-module.exports = {keyCodes, getCookie, capitalize, memoDeep, emptyIfNil, cutTextAt, toHMM, toH, toMM, round, formatPrice, fromHHMMorDec, scorePassword, useChangeState, useFocus, useForceScrollbar, useOuterClick, useMySize, useWindowSize, useEventListener}
+module.exports = {keyCodes, getCookie, capitalize, memoDeep, emptyIfNil, escapeRegExp, cutTextAt, toHMM, toH, toMM, round, formatPrice, fromHHMMorDec, scorePassword, useChangeState, useFocus, useForceScrollbar, useOuterClick, useMySize, useWindowSize, useEventListener}

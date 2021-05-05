@@ -1,6 +1,6 @@
 either = require('ramda/src/either'); isNil = require('ramda/src/isNil'); map = require('ramda/src/map'); match = require('ramda/src/match'); merge = require('ramda/src/merge'); props = require('ramda/src/props'); type = require('ramda/src/type'); #auto_require: srcramda
 {func, $} = RE = require 'ramda-extras' #auto_require: ramda-extras
-[ːbrown, ːwhite, ːmenu] = ['brown', 'white', 'menu'] #auto_sugar
+[ːbrown, ːmenu, ːwhite] = ['brown', 'menu', 'white'] #auto_sugar
 qq = (f) -> console.log match(/return (.*);/, f.toString())[1], f()
 qqq = (...args) -> console.log ...args
 _ = (...xs) -> xs
@@ -68,9 +68,9 @@ DropDown = func
 
 	onClick = () -> setIsOpen !isOpen
 
-	_ {s: 'posr xg1 xr__', className: props.className, s_: props.s_, s__: props.s__},
+	_ {s: 'posr disif', className: props.className, s_: props.s_, s__: props.s__},
 		props.input {isOpen, onClick}
-		if isOpen then _ {ref, s: 'posa w100%'}, props.content selectedIdx, groups, () -> setIsOpen false
+		if isOpen then _ {ref, s: 'posa iw100%'}, props.content selectedIdx, groups, () -> setIsOpen false
 		# if isOpen then props.content selectedIdx, groups, () -> setIsOpen false
 
 
@@ -93,7 +93,7 @@ DropDown.menu = func
 
 	if look == ːbrown
 		input = ({isOpen, onClick}) ->
-			_ Button.raised.brown, {onClick, s: "xr_e #{inputS}"},
+			_ Button.raised.brown, {onClick, s: "xr_c #{inputS}"},
 				_ {s: 'fa12bk-66'}, text()
 				_ SVGarrowDown, {fill: _.colors('bk-4'), s: 'w11 h11 ml8'}
 	else if look == ːwhite
@@ -105,7 +105,7 @@ DropDown.menu = func
 
 	_ DropDown, {className, groups, items, onPicked, input,
 	content: (selectedIdx, groups, close) ->
-		_ {s: 'posa top38 bgwh sh0_1_8_1 z20 p4_0 w100%'},
+		_ {s: 'posa top38 bgwh sh0_1_8_1 z20 p4_0 iw100%'},
 			$ groups, map (group) ->
 				$ group.items, map (item) ->
 					_ {key: item.idx, s: 'fa12bk-86 p8_14 curp ho(bgbua f__wh_) whn'

@@ -1,6 +1,6 @@
 contains = require('ramda/src/contains'); flip = require('ramda/src/flip'); match = require('ramda/src/match'); omit = require('ramda/src/omit'); prop = require('ramda/src/prop'); props = require('ramda/src/props'); type = require('ramda/src/type'); #auto_require: srcramda
 {func} = RE = require 'ramda-extras' #auto_require: ramda-extras
-[ːlook, ːselected, ːbad, ːdark, ːveryBad, ːtext, ːblue, ːcustom, ːkind, ːwait, ːfree, ːgood, ːlight, ːindigo, ːveryGood, ːmood, ːgreen, ːdisabled, ːgrey, ːmodal, ːhue, ːred, ːicon, ːonClick, ːsubmit, ːsquare, ːbeveled, ːhref, ːlink, ːpink, ːraised, ːbrown, ːlinkBlank] = ['look', 'selected', 'bad', 'dark', 'veryBad', 'text', 'blue', 'custom', 'kind', 'wait', 'free', 'good', 'light', 'indigo', 'veryGood', 'mood', 'green', 'disabled', 'grey', 'modal', 'hue', 'red', 'icon', 'onClick', 'submit', 'square', 'beveled', 'href', 'link', 'pink', 'raised', 'brown', 'linkBlank'] #auto_sugar
+[ːdark, ːicon, ːsquare, ːpink, ːmodal, ːlook, ːbeveled, ːonClick, ːgreen, ːfree, ːveryGood, ːtext, ːgrey, ːsubmit, ːindigo, ːselected, ːred, ːlight, ːlink, ːbrown, ːhue, ːblue, ːveryBad, ːbad, ːmood, ːkind, ːgood, ːcustom, ːdisabled, ːlinkBlank, ːraised, ːhref, ːwait] = ['dark', 'icon', 'square', 'pink', 'modal', 'look', 'beveled', 'onClick', 'green', 'free', 'veryGood', 'text', 'grey', 'submit', 'indigo', 'selected', 'red', 'light', 'link', 'brown', 'hue', 'blue', 'veryBad', 'bad', 'mood', 'kind', 'good', 'custom', 'disabled', 'linkBlank', 'raised', 'href', 'wait'] #auto_sugar
 qq = (f) -> console.log match(/return (.*);/, f.toString())[1], f()
 qqq = (...args) -> console.log ...args
 
@@ -122,6 +122,7 @@ Button2 = func.loose
 				when ːblue then clr = 'bub' ; lookS = 'ho(fillbub bgbub-1)'
 				when ːred then clr = 're' ; lookS = 'ho(fillpia)'
 				else clr = 'wh-4' ; lookS = 'ho(fillbk-4 bgwh-3)'
+			lookS += " p#{Math.max(2, Math.min(iconSize/2, 20))}"
 		when ːcustom
 			kindS = lookS = ''
 		when ːbeveled

@@ -1,6 +1,6 @@
 {__, append, contains, inc, into, join, map, match, props, test, without} = R = require 'ramda' #auto_require: ramda
 {$} = RE = require 'ramda-extras' #auto_require: ramda-extras
-[ːwhite, ːblue, ːgreen, ːicon, ːpink, ːraised, ːlight, ːlink, ːlarge, ːmodal, ːfree, ːveryGood, ːbad, ːveryBad, ːsmall, ːcustom, ːbeveled, ːdark, ːgood] = ['white', 'blue', 'green', 'icon', 'pink', 'raised', 'light', 'link', 'large', 'modal', 'free', 'veryGood', 'bad', 'veryBad', 'small', 'custom', 'beveled', 'dark', 'good'] #auto_sugar
+[ːveryBad, ːraised, ːbeveled, ːveryGood, ːmodal, ːlight, ːlink, ːbad, ːdark, ːicon, ːwhite, ːgreen, ːlarge, ːblue, ːcustom, ːfree, ːsmall, ːpink, ːgood] = ['veryBad', 'raised', 'beveled', 'veryGood', 'modal', 'light', 'link', 'bad', 'dark', 'icon', 'white', 'green', 'large', 'blue', 'custom', 'free', 'small', 'pink', 'good'] #auto_sugar
 qq = (f) -> console.log match(/return (.*);/, f.toString())[1], f()
 qqq = (...args) -> console.log ...args
 _ = (...xs) -> xs
@@ -270,7 +270,7 @@ DropDownDemo = ->
 		_ {s: 'fa24bk-86'}, 'DropDown'
 		_ {s: 'mt20 xr__w'}, 
 			_ Box1, {text: 'kind = menu', bg: 'be'},
-				_ Box2, {text: 'look = brown (default)'},
+				_ Box2, {text: 'look = brown (default)', s: 'xc_s'},
 					_ DropDown.menu, 
 						items: ['First choice', 'Second choice', 'Third choice']
 						onPicked: (item) -> changeState {select1: item.value}
@@ -282,7 +282,7 @@ DropDownDemo = ->
 						onPicked: (item) -> changeState {select1: item.value}
 						text: -> "Selected: #{state.select1}"
 
-				_ Box2, {text: 'look = white'},
+				_ Box2, {text: 'look = white', s: 'xc_s'},
 					_ DropDown.menu, 
 						look: ːwhite
 						inputS: 'fa13__6 w160'
