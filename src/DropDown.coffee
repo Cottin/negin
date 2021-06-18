@@ -1,6 +1,6 @@
 either = require('ramda/src/either'); isNil = require('ramda/src/isNil'); map = require('ramda/src/map'); match = require('ramda/src/match'); merge = require('ramda/src/merge'); props = require('ramda/src/props'); type = require('ramda/src/type'); #auto_require: srcramda
 {func, $} = RE = require 'ramda-extras' #auto_require: ramda-extras
-[ːbrown, ːmenu, ːwhite] = ['brown', 'menu', 'white'] #auto_sugar
+[ːfree, ːwhite, ːbrown] = ['free', 'white', 'brown'] #auto_sugar
 qq = (f) -> console.log match(/return (.*);/, f.toString())[1], f()
 qqq = (...args) -> console.log ...args
 _ = (...xs) -> xs
@@ -9,14 +9,12 @@ React = require 'react'
 rfr = require 'react-functional-router'
 
 {useEventListener, useOuterClick, keyCodes: {ESC}} = require './utils'
-Button = require './Button'
+Button = require './Button2'
 # icons = requije './icons'
 useNegin = require './useNegin'
 SVGarrowDown = require 'icons/arrowDown.svg'
 
 
-_kind = [ːmenu] # no default, must choose
-_look = [ːbrown]
 
 ###############################################################################
 DropDown = func
@@ -78,34 +76,27 @@ DropDown = func
 DropDown.menu = func
 	groups〳: [{items: [Object]}] # items must have text in {value: ...}
 	items〳: [Object, String] # if using objects, items muse have text in {value: ...}
-	text: () -> String
+	text〳: () -> String
 	onPicked: (item) ->
-	look〳: new Set [ːbrown, ːwhite]
+	look〳: new Set [ːbrown, ːwhite, ːfree]
+	button: () -> # component eg. Button.slant.white
 	className〳: String
 	inputS〳: String
 	s_〳: String # Just pass-through for easier debugging
 	s__〳: String # Just pass-through for easier debugging
 ,
-({className, look: _look, groups, items, onPicked, text, inputS}) ->
+({className, look: _look, button, groups, items, onPicked, text, input, inputS}) ->
 	_ = useNegin()
 
 	look = _look || ːbrown
 
-	if look == ːbrown
-		input = ({isOpen, onClick}) ->
-			_ Button.raised.brown, {onClick, s: "xr_c #{inputS}"},
-				_ {s: 'fa12bk-66'}, text()
-				_ SVGarrowDown, {fill: _.colors('bk-4'), s: 'w11 h11 ml8'}
-	else if look == ːwhite
-		input = ({isOpen, onClick}) ->
-			_ Button.custom, {onClick, s: "bgwh xrbc p10 _sh8 hofo(bggyc) fa12bk-66 #{inputS}"},
-				_ {s: ''}, text()
-				_ SVGarrowDown, {fill: _.colors('bk-4'), s: 'w11 h11 ml8'}
-
-
-	_ DropDown, {className, groups, items, onPicked, input,
+	_ DropDown, {className, groups, items, onPicked,
+	input: ({isOpen, onClick}) ->
+		_ button, {onClick, s: "xrbc #{inputS}"},
+			_ {s: ''}, text()
+			_ SVGarrowDown, {fill: _.colors('bk-4'), s: 'w11 h11 ml8'}
 	content: (selectedIdx, groups, close) ->
-		_ {s: 'posa top38 bgwh sh0_1_8_1 z20 p4_0 iw100%'},
+		_ {s: 'posa top38 bgwh sh0_2_4_1_bk-2 z20 p4_0 iw100%'},
 			$ groups, map (group) ->
 				$ group.items, map (item) ->
 					_ {key: item.idx, s: 'fa12bk-86 p8_14 curp ho(bgbua f__wh_) whn'

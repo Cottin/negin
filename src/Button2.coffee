@@ -1,6 +1,6 @@
 contains = require('ramda/src/contains'); flip = require('ramda/src/flip'); match = require('ramda/src/match'); omit = require('ramda/src/omit'); prop = require('ramda/src/prop'); props = require('ramda/src/props'); type = require('ramda/src/type'); #auto_require: srcramda
 {func} = RE = require 'ramda-extras' #auto_require: ramda-extras
-[ːdark, ːicon, ːsquare, ːpink, ːmodal, ːlook, ːbeveled, ːonClick, ːgreen, ːfree, ːveryGood, ːtext, ːgrey, ːsubmit, ːindigo, ːselected, ːred, ːlight, ːlink, ːbrown, ːhue, ːblue, ːveryBad, ːbad, ːmood, ːkind, ːgood, ːcustom, ːdisabled, ːlinkBlank, ːraised, ːhref, ːwait] = ['dark', 'icon', 'square', 'pink', 'modal', 'look', 'beveled', 'onClick', 'green', 'free', 'veryGood', 'text', 'grey', 'submit', 'indigo', 'selected', 'red', 'light', 'link', 'brown', 'hue', 'blue', 'veryBad', 'bad', 'mood', 'kind', 'good', 'custom', 'disabled', 'linkBlank', 'raised', 'href', 'wait'] #auto_sugar
+[ːicon, ːhref, ːbeveled, ːblue, ːveryBad, ːslant, ːsquare, ːdark, ːgreen, ːselected, ːlinkBlank, ːdisabled, ːlook, ːmodal, ːindigo, ːgrey, ːfree, ːlightBlue, ːkind, ːwhite, ːhue, ːred, ːveryGood, ːraised, ːlink, ːpink, ːtext, ːbrown, ːwait, ːlight, ːcustom, ːonClick, ːgood, ːmood, ːbad, ːsubmit] = ['icon', 'href', 'beveled', 'blue', 'veryBad', 'slant', 'square', 'dark', 'green', 'selected', 'linkBlank', 'disabled', 'look', 'modal', 'indigo', 'grey', 'free', 'lightBlue', 'kind', 'white', 'hue', 'red', 'veryGood', 'raised', 'link', 'pink', 'text', 'brown', 'wait', 'light', 'custom', 'onClick', 'good', 'mood', 'bad', 'submit'] #auto_sugar
 qq = (f) -> console.log match(/return (.*);/, f.toString())[1], f()
 qqq = (...args) -> console.log ...args
 
@@ -14,8 +14,8 @@ useNegin = require './useNegin'
 # icons = require './icons'
 BounceLoader = require('react-spinners/BounceLoader').default;
 
-_kind = [ːraised, ːfree, ːlink, ːmodal, ːicon, ːcustom, ːbeveled]
-_look = [ːdark, ːlight, ːblue, ːgreen, ːpink, ːgrey, ːbrown, ːindigo, ːred, ːgood, ːbad, ːveryGood, ːveryBad]
+_kind = [ːraised, ːfree, ːlink, ːmodal, ːicon, ːcustom, ːbeveled, ːslant]
+_look = [ːdark, ːlight, ːblue, ːlightBlue, ːgreen, ːpink, ːgrey, ːbrown, ːindigo, ːred, ːgood, ːbad, ːveryGood, ːveryBad, ːwhite]
 
 Button2 = func.loose
 	kind: new Set _kind
@@ -36,6 +36,7 @@ Button2 = func.loose
 	href〳: String
 	onClick〳: (e) -> # Will also be called onKeyDown == SPACE or ENTER
 	s_〳: String
+	clr〳: String # override clr from look
 , 
 (props) ->
 	_ = useNegin()
@@ -64,7 +65,7 @@ Button2 = func.loose
 		comp = 'button'
 		cleanProps.type = 'submit'
 	else
-		comp = 'div'
+		comp = 'a'
 
 	if props.linkBlank then cleanProps.target = '_blank'
 
@@ -72,6 +73,7 @@ Button2 = func.loose
 	iconSize = size * 1.2
 
 	clr = if contains props.look, ['dark', 'brown'] then 'bk-6' else 'wh-9'
+
 
 	switch props.kind
 		when ːraised
@@ -88,11 +90,13 @@ Button2 = func.loose
 				when ːveryBad then lookS = 'fa_wh5 bgre-9 ho(bgre)'
 
 		when ːfree
-			kindS = "#{props.square && 'p12 coa(p12)' || 'p7_15_7_12 coa(p10_15_10_15)'}"
+			kindS = "#{props.square && 'p12 coa(p12)' || 'p10_15_10_12 coa(p10_15_10_15)'}"
 			switch props.look
 				when ːdark then lookS = 'fa_bk-55 hofo(bggy-1)'
 				when ːlight then lookS = "fa_wh-94 #{!props.wait && 'hofo(bgwh-1 f__wh)'}"
 				when ːblue then lookS = 'fa_bua-96 hofo(bggyb-3 f__bua)'
+				when ːdark then lookS = 'fa_bk-55 hofo(bggy-1)'
+				when ːbrown then lookS = 'fa_bk-55 hofo(bgbw-2)'
 
 		when ːlink
 			kindS = "p0 disif"
@@ -118,10 +122,17 @@ Button2 = func.loose
 		when ːicon
 			if !props.icon then throw new Error 'You must supply the icon prop when using Button.icon'
 			switch props.look
-				when ːdark then clr = 'bk-6' ; lookS = 'ho(fillbk-5 bgbk-1)'
-				when ːblue then clr = 'bub' ; lookS = 'ho(fillbub bgbub-1)'
-				when ːred then clr = 're' ; lookS = 'ho(fillpia)'
-				else clr = 'wh-4' ; lookS = 'ho(fillbk-4 bgwh-3)'
+				when ːdark then clr = 'bk-6' ; lookS = 'ho(bgbk-1) hoc1(fillbk-5)'
+				when ːblue then clr = 'bub' ; lookS = 'ho(bgbub-1) hoc1(fillbub)'
+				when ːlightBlue
+					if props.selected
+						clr = 'bub'
+						lookS = 'bgbub-1'
+					else 
+						clr = 'bub-2'
+						lookS = 'ho(bgbub-1) hoc1(fillbub)'
+				when ːred then clr = 're' ; lookS = 'hoc1(fillpia)'
+				else clr = 'wh-4' ; lookS = 'ho(bgwh-3) hoc1(fillbk-4)'
 			lookS += " p#{Math.max(2, Math.min(iconSize/2, 20))}"
 		when ːcustom
 			kindS = lookS = ''
@@ -131,33 +142,37 @@ Button2 = func.loose
 				when ːgreen then lookS = "fa_wh6 bggn hofo(bggna f__wh)"
 				when ːpink then lookS = "fa_wh6 bgpib hofo(bgpic f__wh)"
 				when ːgrey then lookS = "fa_bk-46 bgbuf hofo(bgbuf-8 f__wh)"
+		when ːslant
+			kindS = "xrbc p10_20 _sh8 hofo(bggyc) "
+			switch props.look
+				when ːwhite then lookS = "bgwh fa_bk-66"
+
+	if props.clr? then clr = props.clr
 
 	commonS = "fo(out0) curp xrcc posr f_#{size}___"
 	commonSoverride = "#{touchStart && 'bgbuj'} #{props.disabled && 'op6 hofo()'}"
 
-	switch props.kind
-		when ːraised, ːfree, ːlink, ːmodal, ːicon, ːcustom, ːbeveled
-			_ comp, {s: "#{commonS} #{kindS} #{lookS} #{props.s_} #{commonSoverride}",
-			...commonProps, onTouchStart, ...cleanProps},
-				if props.wait
-					_ {s: 'xrcc posr'},
-						_ {s: 'op0'},
-							if props.children
-								if type(props.children) == 'Function' then props.children({touchStart})
-								else props.children
-							else props.text
-						_ {s: 'posa'},
-							_ BounceLoader, {color: _.colors(clr), loading: true, size: 25}
-				else if props.icon
-					_ React.Fragment, {},
-						_ props.icon, {fill: _.colors(clr),
-						s: "w#{iconSize} h#{iconSize} coa(w#{iconSize*1.2} h#{iconSize*1.2})"}
-						if props.text then _ {s: 'ml6'}, props.text
-				else if props.children
-					if type(props.children) == 'Function' then props.children({touchStart})
-					else props.children
-				else
-					props.text
+	_ comp, {s: "#{commonS} #{kindS} #{lookS} #{props.s_} #{commonSoverride}",
+	...commonProps, onTouchStart, ...cleanProps},
+		if props.wait
+			_ {s: 'xrcc posr'},
+				_ {s: 'op0'},
+					if props.children
+						if type(props.children) == 'Function' then props.children({touchStart})
+						else props.children
+					else props.text
+				_ {s: 'posa'},
+					_ BounceLoader, {color: _.colors(clr), loading: true, size: 25}
+		else if props.icon
+			_ React.Fragment, {},
+				_ props.icon, {fill: _.colors(clr), className: 'c1',
+				s: "w#{iconSize} h#{iconSize} coa(w#{iconSize*1.2} h#{iconSize*1.2})"}
+				if props.text then _ {s: 'ml6'}, props.text
+		else if props.children
+			if type(props.children) == 'Function' then props.children({touchStart})
+			else props.children
+		else
+			props.text
 
 
 dottedButton = RE.dottedApi {kind: _kind, look: _look}, Button2
