@@ -13,6 +13,7 @@ useNegin = require './useNegin'
 AutoComplete = require './AutoComplete'
 Button = require './Button'
 DropDown = require './DropDown'
+clm = require 'country-locale-map'
 
 
 # https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
@@ -300,13 +301,53 @@ CountryPicker = func
 		else false
 	},
 	(selectedIdx, groups) ->
-		_ {s: 'posa top35 w100% bgwh sh0_1_8_1 z20'},
+		_ {s: 'posa top35 w100% bgwh sh0_1_8_1_bk-2 z20'},
 			$ groups[0]?.items || [], map (country) ->
 				_ {key: country.code, tabIndex: 0, onMouseDown: -> props.onPicked(country),
 				s: "p2_10 xr_c #{selectedIdx == country.idx && 'bggyb-6'} ho(bggyb-4) curp"},
 					_ 'ul', {className: 'f16', s: 'm0 p0'},
 							_ 'li', {className: "flag flag__#{toLower country.code}"}
 					_ {s: 'fa12bk-85 ml7 mb1 p5_0'}, country.name
+
+CountryPicker.currency = func
+	isPicked: ({name, code}) -> Boolean
+	onPicked: ({name, code}) ->
+	inputS〳: String
+	className〳: String
+	s_〳: String # Just pass-through for easier debugging
+	s__〳: String # Just pass-through for easier debugging
+,
+(props) ->
+	_ = useNegin()
+	[state, changeState] = useChangeState {isPicking: false}
+
+	groups = [{items: countries}]
+	pickedItem = null
+	for c in countries
+		if props.isPicked c
+			pickedItem = c
+			break
+
+	_ AutoComplete, {s: '', inputS: props.inputS || 'fa13bk-86 _noOut', groups,
+	onPicked: (country) -> props.onPicked country
+	test: (text, item) ->
+		if !item then false
+		else if test new RegExp("^#{text}", 'i'), item.name then true
+		else if test new RegExp("^#{text}", 'i'), clm.getCurrencyByAlpha2 item.code then true
+		else if item.alias
+			for a in item.alias
+				if test new RegExp("^#{text}", 'i'), a then return true
+			return false
+		else false
+	},
+	(selectedIdx, groups) ->
+		_ {s: 'posa top35 w100% bgwh sh0_1_8_1_bk-2 z20'},
+			$ groups[0]?.items || [], map (country) ->
+				_ {key: country.code, tabIndex: 0, onMouseDown: -> props.onPicked(country),
+				s: "p2_10 xr_c #{selectedIdx == country.idx && 'bggyb-6'} ho(bggyb-4) curp"},
+					_ 'ul', {className: 'f16', s: 'm0 p0'},
+							_ 'li', {className: "flag flag__#{toLower country.code}"}
+					_ {s: 'fa12bk-85 ml7 mb1 p5_0'}, country.name + ' - ' + clm.getCurrencyByAlpha2 country.code
 
 	# _ DropDown,
 	# 	groups: groups

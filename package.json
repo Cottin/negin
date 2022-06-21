@@ -29,6 +29,7 @@
     "react": "^16.13.1"
   },
   "dependencies": {
+    "country-locale-map": "^1.7.4",
     "ramda": ">0.25.0",
     "ramda-extras": "^0.4.16",
     "react-spinners": "^0.8.3"

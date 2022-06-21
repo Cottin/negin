@@ -94,6 +94,8 @@ AutoComplete.simple = func
 	onPicked: (item) ->
 	children〳: (selectedIdx, items, matched) ->
 	ifEmpty〳: () -> # React child
+	s_〳: String # Just pass-through for easier debugging
+	s__〳: String # Just pass-through for easier debugging
 ,
 (props) ->
 	_ = useNegin()
@@ -104,7 +106,7 @@ AutoComplete.simple = func
 	onPicked: (item, items, text) -> props.onPicked item?.text, items, text},
 		(selectedIdx, groups, matched) ->
 			items = groups[0]?.items || []
-			_ {s: 'posa top35 w100% bgwh sh0_1_8_1 z20 p5_0'},
+			_ {s: 'posa top35 w100% bgwh sh0_1_8_1_bk-2 z20 p5_0'},
 				if isEmpty items
 					props.ifEmpty matched
 				else

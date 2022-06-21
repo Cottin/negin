@@ -1,6 +1,6 @@
 contains = require('ramda/src/contains'); flip = require('ramda/src/flip'); match = require('ramda/src/match'); omit = require('ramda/src/omit'); prop = require('ramda/src/prop'); props = require('ramda/src/props'); type = require('ramda/src/type'); #auto_require: srcramda
 {func} = RE = require 'ramda-extras' #auto_require: ramda-extras
-[ːicon, ːhref, ːbeveled, ːblue, ːveryBad, ːslant, ːsquare, ːdark, ːgreen, ːselected, ːlinkBlank, ːdisabled, ːlook, ːmodal, ːindigo, ːgrey, ːfree, ːlightBlue, ːkind, ːwhite, ːhue, ːred, ːveryGood, ːraised, ːlink, ːpink, ːtext, ːbrown, ːwait, ːlight, ːcustom, ːonClick, ːgood, ːmood, ːbad, ːsubmit] = ['icon', 'href', 'beveled', 'blue', 'veryBad', 'slant', 'square', 'dark', 'green', 'selected', 'linkBlank', 'disabled', 'look', 'modal', 'indigo', 'grey', 'free', 'lightBlue', 'kind', 'white', 'hue', 'red', 'veryGood', 'raised', 'link', 'pink', 'text', 'brown', 'wait', 'light', 'custom', 'onClick', 'good', 'mood', 'bad', 'submit'] #auto_sugar
+[ːbad, ːhref, ːgreen, ːmood, ːveryBad, ːred, ːslant, ːsquare, ːlightBlue, ːtext, ːgood, ːraised, ːindigo, ːwait, ːkind, ːlight, ːbrown, ːlinkBlank, ːlink, ːdark, ːlook, ːwhite, ːcustom, ːbeveled, ːveryGood, ːselected, ːonClick, ːsubmit, ːicon, ːinnerRef, ːblue, ːhue, ːdisabled, ːgrey, ːfree, ːmodal, ːpink] = ['bad', 'href', 'green', 'mood', 'veryBad', 'red', 'slant', 'square', 'lightBlue', 'text', 'good', 'raised', 'indigo', 'wait', 'kind', 'light', 'brown', 'linkBlank', 'link', 'dark', 'look', 'white', 'custom', 'beveled', 'veryGood', 'selected', 'onClick', 'submit', 'icon', 'innerRef', 'blue', 'hue', 'disabled', 'grey', 'free', 'modal', 'pink'] #auto_sugar
 qq = (f) -> console.log match(/return (.*);/, f.toString())[1], f()
 qqq = (...args) -> console.log ...args
 
@@ -34,6 +34,7 @@ Button2 = func.loose
 	linkBlank〳: Boolean
 	submit〳: Boolean
 	href〳: String
+	innerRef〳: Object # TODO: probably better to use React.forwardRef but to lazy now. https://stackoverflow.com/a/65756885/416797
 	onClick〳: (e) -> # Will also be called onKeyDown == SPACE or ENTER
 	s_〳: String
 	clr〳: String # override clr from look
@@ -48,12 +49,14 @@ Button2 = func.loose
 		flip(setTimeout) 500, -> setTouchStart false
 
 	cleanProps = omit [ːkind, ːlook, ːhue, ːmood, ːdisabled, ːwait, ːselected, ːsquare, ːtext, ːicon, ːlink,
-	ːlinkBlank, ːsubmit, ːhref, ːonClick], props
+	ːlinkBlank, ːsubmit, ːhref, ːonClick, ːinnerRef], props
 
 	if props.onClick && !props.wait && !props.disabled
 		commonProps.onClick = props.onClick
 		commonProps.onKeyDown = (e) ->
 			if e.keyCode == SPACE || e.keyCode == ENTER then props.onClick()
+
+	if props.innerRef then commonProps.ref = props.innerRef
 
 	if props.link
 		comp = rfr.Link
@@ -137,7 +140,7 @@ Button2 = func.loose
 		when ːcustom
 			kindS = lookS = ''
 		when ːbeveled
-			kindS = "xrcc ls0.2 p11_30 br5 _sha0_2_1_0_bk-4"
+			kindS = "xrcc ls0.2 p11_30 br5 sh0_2_1_0_bk-4"
 			switch props.look
 				when ːgreen then lookS = "fa_wh6 bggn hofo(bggna f__wh)"
 				when ːpink then lookS = "fa_wh6 bgpib hofo(bgpic f__wh)"
@@ -163,14 +166,14 @@ Button2 = func.loose
 					else props.text
 				_ {s: 'posa'},
 					_ BounceLoader, {color: _.colors(clr), loading: true, size: 25}
+		else if props.children
+			if type(props.children) == 'Function' then props.children({touchStart})
+			else props.children
 		else if props.icon
 			_ React.Fragment, {},
 				_ props.icon, {fill: _.colors(clr), className: 'c1',
 				s: "w#{iconSize} h#{iconSize} coa(w#{iconSize*1.2} h#{iconSize*1.2})"}
 				if props.text then _ {s: 'ml6'}, props.text
-		else if props.children
-			if type(props.children) == 'Function' then props.children({touchStart})
-			else props.children
 		else
 			props.text
 
